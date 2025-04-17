@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import * as React from "react";
+import * as React from 'react'
 import {
   ArrowUpCircleIcon,
   CylinderIcon,
@@ -16,13 +16,13 @@ import {
   ListIcon,
   SearchIcon,
   SettingsIcon,
-  UsersIcon,
-} from "lucide-react";
+  ShieldIcon,
+} from 'lucide-react'
 
-import { NavDocuments } from "@/components/nav-documents";
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import { NavDocuments } from '@/components/nav-documents'
+import { NavMain } from '@/components/nav-main'
+import { NavSecondary } from '@/components/nav-secondary'
+import { NavUser } from '@/components/nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -31,89 +31,89 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
+} from '@/components/ui/sidebar'
+import { Separator } from '@radix-ui/react-separator'
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: 'admin',
+    email: 'admin@joopiter.com',
+    avatar: '/avatars/shadcn.jpg',
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "#",
+      title: 'Dashboard',
+      url: '/dashboard',
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Applications",
-      url: "/applicants",
+      title: 'Applications',
+      url: '/applicants',
       icon: FolderIcon,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: 'Lifecycle',
+      url: '/',
       icon: CylinderIcon,
     },
     {
-      title: "Job posting",
-      url: "#",
+      title: 'Job posting',
+      url: '/job',
       icon: ListIcon,
     },
   ],
   navClouds: [
     {
-      title: "Capture",
+      title: 'Capture',
       icon: CameraIcon,
       isActive: true,
-      url: "#",
+      url: '#',
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: 'Active Proposals',
+          url: '#',
         },
         {
-          title: "Archived",
-          url: "#",
+          title: 'Archived',
+          url: '#',
         },
       ],
     },
     {
-      title: "Proposal",
+      title: 'Proposal',
       icon: FileTextIcon,
-      url: "#",
+      url: '#',
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: 'Active Proposals',
+          url: '#',
         },
         {
-          title: "Archived",
-          url: "#",
+          title: 'Archived',
+          url: '#',
         },
       ],
     },
     {
-      title: "Prompts",
+      title: 'Prompts',
       icon: FileCodeIcon,
-      url: "#",
+      url: '#',
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: 'Active Proposals',
+          url: '#',
         },
         {
-          title: "Archived",
-          url: "#",
+          title: 'Archived',
+          url: '#',
         },
       ],
     },
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "#",
+      title: 'Settings',
+      url: '#',
       icon: SettingsIcon,
     },
   ],
@@ -134,7 +134,7 @@ const data = {
   //     icon: FileIcon,
   //   },
   // ],
-};
+}
 
 export function AppSidebar({ ...props }) {
   return (
@@ -147,7 +147,7 @@ export function AppSidebar({ ...props }) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <ArrowUpCircleIcon className="h-5 w-5" />
+                <ShieldIcon className="h-5 w-5" />
                 <span className="text-base font-semibold">Joopiter Co.</span>
               </a>
             </SidebarMenuButton>
@@ -164,5 +164,5 @@ export function AppSidebar({ ...props }) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

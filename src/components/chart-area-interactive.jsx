@@ -1,66 +1,65 @@
-"use client";
+'use client'
 
-import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import * as React from 'react'
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from '@/components/ui/chart'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+} from '@/components/ui/select'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 export const chartData = [
-  { date: "2024-03-01", applicants: 9 },
-  { date: "2024-03-02", applicants: 16 },
-  { date: "2024-03-03", applicants: 18 },
-  { date: "2024-03-04", applicants: 14 },
-  { date: "2024-03-05", applicants: 12 },
-  { date: "2024-03-06", applicants: 14 },
-  { date: "2024-03-07", applicants: 2 },
-  { date: "2024-03-08", applicants: 4 },
-  { date: "2024-03-09", applicants: 1 },
-  { date: "2024-03-10", applicants: 2 },
-];
+  { date: '2024-03-01', applicants: 9 },
+  { date: '2024-03-02', applicants: 16 },
+  { date: '2024-03-03', applicants: 18 },
+  { date: '2024-03-04', applicants: 14 },
+  { date: '2024-03-05', applicants: 12 },
+  { date: '2024-03-06', applicants: 14 },
+  { date: '2024-03-07', applicants: 2 },
+  { date: '2024-03-08', applicants: 4 },
+  { date: '2024-03-09', applicants: 1 },
+  { date: '2024-03-10', applicants: 2 },
+]
 
 const chartConfig = {
   applicants: {
-    label: "Applicants",
-    color: "hsl(var(--chart-1))",
+    label: 'Applicants',
+    color: 'hsl(var(--chart-1))',
   },
-};
+}
 
 export function ChartAreaInteractive() {
-  const [timeRange, setTimeRange] = React.useState("30d");
+  const [timeRange, setTimeRange] = React.useState('30d')
 
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
+    const date = new Date(item.date)
+    const referenceDate = new Date('2024-06-30')
+    let daysToSubtract = 90
+    if (timeRange === '30d') {
+      daysToSubtract = 30
+    } else if (timeRange === '7d') {
+      daysToSubtract = 7
     }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
-  console.log(filteredData);
+    const startDate = new Date(referenceDate)
+    startDate.setDate(startDate.getDate() - daysToSubtract)
+    return date >= startDate
+  })
+  console.log(filteredData)
   return (
     <Card className="@container/card">
       <CardHeader className="relative">
@@ -150,11 +149,11 @@ export function ChartAreaInteractive() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+                const date = new Date(value)
+                return date.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                })
               }}
             />
             <ChartTooltip
@@ -162,10 +161,10 @@ export function ChartAreaInteractive() {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    });
+                    return new Date(value).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })
                   }}
                   indicator="dot"
                 />
@@ -181,5 +180,5 @@ export function ChartAreaInteractive() {
         </ChartContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

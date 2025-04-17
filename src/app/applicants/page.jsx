@@ -6,11 +6,11 @@ import data from './data.json'
 import { fetchApplicants } from '@/lib/requests'
 
 function Page() {
-  const { data: allApplicants, isLoading } = useQuery({
+  const { data: allApplicants, isFetching } = useQuery({
     queryKey: ['applicants'],
     queryFn: () => fetchApplicants(),
   })
-  console.log(allApplicants)
+  if (isFetching) return <div>Loading</div>
   return (
     <div>
       <DataTable data={allApplicants} />
