@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
   ArrowUpCircleIcon,
-  BarChartIcon,
+  CylinderIcon,
   CameraIcon,
   ClipboardListIcon,
   DatabaseIcon,
@@ -32,6 +32,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { Separator } from "@radix-ui/react-separator";
 
 const data = {
   user: {
@@ -46,24 +47,19 @@ const data = {
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: ListIcon,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: BarChartIcon,
-    },
-    {
-      title: "Projects",
-      url: "#",
+      title: "Applications",
+      url: "/applicants",
       icon: FolderIcon,
     },
     {
-      title: "Team",
+      title: "Lifecycle",
       url: "#",
-      icon: UsersIcon,
+      icon: CylinderIcon,
+    },
+    {
+      title: "Job posting",
+      url: "#",
+      icon: ListIcon,
     },
   ],
   navClouds: [
@@ -121,23 +117,23 @@ const data = {
       icon: SettingsIcon,
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: DatabaseIcon,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: ClipboardListIcon,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: FileIcon,
-    },
-  ],
+  // documents: [
+  //   {
+  //     name: "Data Library",
+  //     url: "#",
+  //     icon: DatabaseIcon,
+  //   },
+  //   {
+  //     name: "Reports",
+  //     url: "#",
+  //     icon: ClipboardListIcon,
+  //   },
+  //   {
+  //     name: "Word Assistant",
+  //     url: "#",
+  //     icon: FileIcon,
+  //   },
+  // ],
 };
 
 export function AppSidebar({ ...props }) {
@@ -158,9 +154,10 @@ export function AppSidebar({ ...props }) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+      <Separator className="my-2" />
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        {/* <NavDocuments items={data.documents} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
