@@ -17,6 +17,7 @@ import {
   SearchIcon,
   SettingsIcon,
   ShieldIcon,
+  ChartColumnDecreasingIcon,
 } from 'lucide-react'
 
 import { NavDocuments } from '@/components/nav-documents'
@@ -52,9 +53,9 @@ const data = {
       icon: FolderIcon,
     },
     {
-      title: 'Lifecycle',
+      title: 'Explore',
       url: '/',
-      icon: CylinderIcon,
+      icon: ChartColumnDecreasingIcon,
     },
     {
       title: 'Job posting',
