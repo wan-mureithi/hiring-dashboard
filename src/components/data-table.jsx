@@ -82,6 +82,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip'
+import { HumanScoreModal } from './human-modal'
 
 export const schema = z.object({
   id: z.number(),
@@ -112,122 +113,6 @@ function DragHandle({ id }) {
     </Button>
   )
 }
-
-const columns = [
-  // {
-  //   id: 'drag',
-  //   header: () => null,
-  //   cell: ({ row }) => <DragHandle id={row.original.id} />,
-  // },
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && 'indeterminate')
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'name',
-    header: 'Name',
-    cell: ({ row }) => row.original.Name,
-  },
-  {
-    accessorKey: 'gender',
-    header: 'Gender',
-    cell: ({ row }) => row.original.Gender,
-    enableHiding: true,
-  },
-  {
-    accessorKey: 'highest_degree',
-    header: 'Degree',
-    cell: ({ row }) => row.original['Highest degree'],
-  },
-  {
-    accessorKey: 'years_of_work',
-    header: 'Work Exp.',
-    cell: ({ row }) => `${row.original['Years of work']} yrs`,
-  },
-  {
-    accessorKey: 'elo_score',
-    header: 'Elo Score',
-    cell: ({ row }) => row.original['Elo score'],
-  },
-  {
-    accessorKey: 'cv_rating',
-    header: 'CV Rating',
-    cell: ({ row }) => (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className="cursor-pointer">
-            {row.original['CV rating'] || '--'}
-          </span>
-        </TooltipTrigger>
-        <TooltipContent className="max-w-sm whitespace-pre-wrap">
-          {row.original['AI reasoning']}
-        </TooltipContent>
-      </Tooltip>
-    ),
-    enableSorting: true,
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => <Badge className="text-xs">{row.original.Status}</Badge>,
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    cell: ({ row }) => (
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => {
-            // Call FastAPI /score endpoint with row.original.id
-            fetch(`http://127.0.0.1:8000/score/cv/${row.original.id}`, {
-              method: 'POST',
-            })
-              .then(() => toast.success('Score requested!'))
-              .catch(() => toast.error('Failed to trigger scoring'))
-          }}
-        >
-          <BotIcon />
-        </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => {
-            // Call FastAPI /score endpoint with row.original.id
-            fetch(`/api/score/${row.original.id}`, { method: 'POST' })
-              .then(() => toast.success('Score requested!'))
-              .catch(() => toast.error('Failed to trigger scoring'))
-          }}
-        >
-          <UserRoundPenIcon />
-        </Button>
-      </div>
-    ),
-  },
-]
 
 function DraggableRow({ row }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -260,6 +145,7 @@ export function DataTable({ data: initialData }) {
   const [columnVisibility, setColumnVisibility] = React.useState({})
   const [columnFilters, setColumnFilters] = React.useState([])
   const [sorting, setSorting] = React.useState([])
+  const [openModal, setOpenModal] = React.useState(false)
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
@@ -273,11 +159,147 @@ export function DataTable({ data: initialData }) {
 
   const dataIds = React.useMemo(() => data?.map(({ id }) => id) || [], [data])
 
+  const columns = [
+    // {
+    //   id: 'drag',
+    //   header: () => null,
+    //   cell: ({ row }) => <DragHandle id={row.original.id} />,
+    // },
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: ({ row }) => row.original.Name,
+    },
+    {
+      accessorKey: 'gender',
+      header: 'Gender',
+      cell: ({ row }) => row.original.Gender,
+      enableHiding: true,
+    },
+    {
+      accessorKey: 'highest_degree',
+      header: 'Degree',
+      cell: ({ row }) => row.original['Highest degree'],
+    },
+    {
+      accessorKey: 'years_of_work',
+      header: 'Work Exp.',
+      cell: ({ row }) => `${row.original['Years of work']} yrs`,
+    },
+    {
+      accessorKey: 'elo_score',
+      header: 'Elo Score',
+      cell: ({ row }) => row.original['Elo score'],
+    },
+    {
+      accessorKey: 'cv_rating',
+      header: 'CV Rating',
+      cell: ({ row }) => (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="cursor-pointer">
+              {row.original['CV rating'] || '--'}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-sm whitespace-pre-wrap">
+            {row.original['AI reasoning']}
+          </TooltipContent>
+        </Tooltip>
+      ),
+      enableSorting: true,
+    },
+    {
+      accessorKey: 'user_rating',
+      header: 'User Rating',
+      cell: ({ row }) => (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="cursor-pointer">
+              {row.original['User rating'] || '--'}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent className="max-w-sm whitespace-pre-wrap">
+            {row.original['User reasoning']}
+          </TooltipContent>
+        </Tooltip>
+      ),
+      enableSorting: true,
+    },
+    {
+      accessorKey: 'status',
+      header: 'Status',
+      cell: ({ row }) => (
+        <Badge className="text-xs">{row.original.Status}</Badge>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => (
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => {
+              fetch(`http://127.0.0.1:8000/score/cv/${row.original.id}`, {
+                method: 'POST',
+              })
+                .then(() => toast.success('Score requested!'))
+                .catch(() => toast.error('Failed to trigger scoring'))
+            }}
+          >
+            <BotIcon />
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setOpenModal(true)}
+          >
+            <UserRoundPenIcon />
+          </Button>
+          <HumanScoreModal
+            open={openModal}
+            onOpenChange={setOpenModal}
+            recordId={row.original.id}
+          />
+        </div>
+      ),
+    },
+  ]
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
+      openModal,
       columnVisibility,
       rowSelection,
       columnFilters,
@@ -287,6 +309,7 @@ export function DataTable({ data: initialData }) {
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
+    onHumanEvalModalChange: setOpenModal,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
