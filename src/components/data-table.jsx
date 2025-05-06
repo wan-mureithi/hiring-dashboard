@@ -83,6 +83,10 @@ import {
   TooltipContent,
 } from '@/components/ui/tooltip'
 import { HumanScoreModal } from './human-modal'
+import { useMutation } from '@tanstack/react-query'
+import { useToast } from '@/hooks/use-toast'
+import { runEloComparison, scoreSingleApplicant } from '@/lib/requests'
+import Loader from './loader'
 
 export const schema = z.object({
   id: z.number(),
@@ -157,6 +161,41 @@ export function DataTable({ data: initialData }) {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
+  const { toast } = useToast
+  const { mutate: runElo, isPending } = useMutation({
+    mutationFn: runEloComparison,
+    onSuccess: (data) => {
+      console.log('Did something happen well?', data)
+      toast({
+        title: 'Human score submitted',
+        duration: 2000,
+        variant: 'success',
+      })
+    },
+    onError: (err) => {
+      console.log('Did something happen baddly?', err)
+      toast({
+        title: 'Failed to score',
+        duration: 2000,
+        variant: 'destructive',
+      })
+    },
+  })
+  const { mutate: scoreCV, isPending: isScoringPending } = useMutation({
+    mutationFn: (applicantId) => scoreSingleApplicant(applicantId),
+    onSuccess: () =>
+      toast({
+        title: 'AI score submitted',
+        duration: 2000,
+        variant: 'success',
+      }),
+    onError: () =>
+      toast({
+        title: 'Failed to score',
+        duration: 2000,
+        variant: 'destructive',
+      }),
+  })
 
   const dataIds = React.useMemo(() => data?.map(({ id }) => id) || [], [data])
 
@@ -244,7 +283,9 @@ export function DataTable({ data: initialData }) {
         <Tooltip>
           <TooltipTrigger asChild>
             <span className="cursor-pointer">
-              {row.original['User rating'] || '--'}
+              {row.original['User rating']
+                ? row.original['User rating'] + '%'
+                : '--'}
             </span>
           </TooltipTrigger>
           <TooltipContent className="max-w-sm whitespace-pre-wrap">
@@ -269,13 +310,8 @@ export function DataTable({ data: initialData }) {
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => {
-              fetch(`http://127.0.0.1:8000/score/cv/${row.original.id}`, {
-                method: 'POST',
-              })
-                .then(() => toast.success('Score requested!'))
-                .catch(() => toast.error('Failed to trigger scoring'))
-            }}
+            disabled={isScoringPending}
+            onClick={() => scoreCV(row.original.id)}
           >
             <BotIcon />
           </Button>
@@ -335,8 +371,15 @@ export function DataTable({ data: initialData }) {
       className="flex w-full flex-col justify-start gap-6"
     >
       <div className="flex items-center justify-between px-4 lg:px-6 mt-4">
-        <Button variant="outline" size="sm">
-          <span className="hidden lg:inline">Score multiple</span>
+        <Button
+          variant="outline"
+          onClick={() => runElo()}
+          disabled={isPending}
+          size="sm"
+        >
+          <span className="hidden lg:inline">
+            {isPending ? 'Running...' : 'Random Elo Scoring Pairwise'}{' '}
+          </span>
         </Button>
 
         <DropdownMenu>

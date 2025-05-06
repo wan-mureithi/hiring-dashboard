@@ -16,6 +16,7 @@ export async function makeRequest(options) {
     params,
     data: body,
     headers,
+    timeout: 60000,
   }
 
   try {

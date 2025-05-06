@@ -27,7 +27,7 @@ export function HumanScoreModal({ open, onOpenChange, recordId }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          user_rating: parseFloat(rating),
+          user_rating: parseFloat((rating / 10) * 100),
           user_reasoning: reasoning,
         }),
       })
