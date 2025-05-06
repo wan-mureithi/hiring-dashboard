@@ -12,16 +12,18 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/hooks/use-toast'
 
 export function HumanScoreModal({ open, onOpenChange, recordId }) {
   const [rating, setRating] = useState('')
   const [reasoning, setReasoning] = useState('')
   const [loading, setLoading] = useState(false)
-
+  const { toast } = useToast()
+  console.log('this>>', recordId)
   const submit = async () => {
     setLoading(true)
     try {
-      await fetch(`http://127.0.0.1:8000/score/human/${recordId}/human`, {
+      await fetch(`http://127.0.0.1:8000/score/human/${recordId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -29,10 +31,20 @@ export function HumanScoreModal({ open, onOpenChange, recordId }) {
           user_reasoning: reasoning,
         }),
       })
-      toast.success('Human score submitted')
+      toast({
+        title: 'Human score submitted',
+        duration: 2000,
+        variant: 'success',
+      })
+      //toast.success('Human score submitted')
       onOpenChange(false)
     } catch (e) {
-      toast.error('Failed to submit score')
+      toast({
+        title: 'Failed to submitted',
+        duration: 2000,
+        variant: 'destructive',
+      })
+      //toast.error('Failed to submit score')
     } finally {
       setLoading(false)
     }

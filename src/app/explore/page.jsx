@@ -10,6 +10,10 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  ResponsiveContainer,
+  Legend,
+  Scatter,
+  ScatterChart,
 } from 'recharts'
 import { useQuery } from '@tanstack/react-query'
 import { fetchApplicants } from '@/lib/requests'
@@ -35,13 +39,20 @@ function Page() {
     queryFn: () => fetchApplicants(),
   })
   if (isFetching) return <Loader />
-  const genderData = Object.entries(
-    applicants.reduce((acc, a) => {
-      acc[a.Gender] = (acc[a.Gender] || 0) + 1
-      return acc
-    }, {})
-  ).map(([key, value]) => ({ name: key, value }))
+  const genderCount = applicants.reduce((acc, curr) => {
+    acc[curr.Gender] = (acc[curr.Gender] || 0) + 1
+    return acc
+  }, {})
 
+  const degreeCount = applicants.reduce((acc, curr) => {
+    acc[curr.degree] = (acc[curr.degree] || 0) + 1
+    return acc
+  }, {})
+  const genderData = Object.entries(genderCount).map(([gender, count]) => ({
+    gender,
+    count,
+  }))
+  console.log(genderData, genderCount)
   const degreeData = Object.entries(
     applicants.reduce((acc, a) => {
       acc[a['Highest degree']] = (acc[a['Highest degree']] || 0) + 1
@@ -66,28 +77,18 @@ function Page() {
 
   return (
     <div className="p-8 space-y-12">
-      <h1 className="text-2xl font-bold">📊 Applicant Visuals</h1>
       <div className="grid grid-cols-2 gap-2">
         <Card className="@container/card p-4">
           <h2 className="text-xl font-semibold mb-2">Gender Distribution</h2>
-          <PieChart width={400} height={300}>
-            <Pie
-              data={genderData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-            >
-              {genderData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={genderData}>
+              <XAxis dataKey="gender" />
+              <YAxis />
+              <Tooltip />
+              {/* <Legend /> */}
+              <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
         </Card>
         <Card className="@container/card p-4">
           <h2 className="text-xl font-semibold mb-2">Degree Frequency</h2>
@@ -112,14 +113,48 @@ function Page() {
           </BarChart>
         </Card>
         <Card className="@container/card p-4">
-          <h2 className="text-xl font-semibold mb-2">CV Rating Histogram</h2>
-          <BarChart width={500} height={300} data={cvRatingData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <CartesianGrid strokeDasharray="3 3" />
-            <Bar dataKey="value" fill="#ffc658" />
-          </BarChart>
+          <h2 className="text-lg font-semibold">
+            ELO Score vs Years of Experience
+          </h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <ScatterChart>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                type="number"
+                dataKey="Years of work"
+                name="Years of work"
+                label={{
+                  value: 'Years of work',
+                  position: 'insideBottom',
+                  offset: -5,
+                }}
+              />
+              <YAxis
+                type="number"
+                dataKey="Elo score"
+                name="Elo score"
+                domain={[800, 'auto']}
+                label={{
+                  value: 'Elo score',
+                  angle: -90,
+                  position: 'insideLeft',
+                }}
+              />
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+              <Legend />
+
+              <Scatter
+                name="Female"
+                data={applicants.filter((d) => d.Gender === 'Female')}
+                fill="#8884d8"
+              />
+              <Scatter
+                name="Male"
+                data={applicants.filter((d) => d.Gender === 'Male')}
+                fill="#82ca9d"
+              />
+            </ScatterChart>
+          </ResponsiveContainer>
         </Card>
       </div>
     </div>

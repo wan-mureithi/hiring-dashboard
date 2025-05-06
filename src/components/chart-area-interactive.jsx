@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 import {
@@ -22,7 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import Loader from '@/components/loader'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { fetchApplicants } from '@/lib/requests'
 export const chartData = [
   { date: '2024-03-01', applicants: 9 },
   { date: '2024-03-02', applicants: 16 },
@@ -44,7 +47,27 @@ const chartConfig = {
 }
 
 export function ChartAreaInteractive() {
-  const [timeRange, setTimeRange] = React.useState('30d')
+  const [timeRange, setTimeRange] = React.useState('60d')
+  const { data: allApplicants, isFetching } = useQuery({
+    queryKey: ['applicants'],
+    queryFn: () => fetchApplicants(),
+  })
+
+  const newChartdata = allApplicants
+    ? Object.values(
+        allApplicants?.reduce((acc, applicant) => {
+          const date = applicant['Date applied']
+          if (!date) return acc
+
+          if (!acc[date]) {
+            acc[date] = { date, applicants: 0 }
+          }
+
+          acc[date].applicants += 1
+          return acc
+        }, {})
+      ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    : null
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
@@ -59,7 +82,9 @@ export function ChartAreaInteractive() {
     startDate.setDate(startDate.getDate() - daysToSubtract)
     return date >= startDate
   })
-  console.log(filteredData)
+  console.log(allApplicants)
+  console.log(newChartdata)
+  if (isFetching) return <Loader />
   return (
     <Card className="@container/card">
       <CardHeader className="relative">
@@ -70,7 +95,7 @@ export function ChartAreaInteractive() {
           </span>
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
-        <div className="absolute right-4 top-4">
+        {/* <div className="absolute right-4 top-4">
           <ToggleGroup
             type="single"
             value={timeRange}
@@ -107,14 +132,14 @@ export function ChartAreaInteractive() {
               </SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={chartData}>
+          <AreaChart data={newChartdata}>
             <defs>
               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
                 <stop

@@ -146,6 +146,7 @@ export function DataTable({ data: initialData }) {
   const [columnFilters, setColumnFilters] = React.useState([])
   const [sorting, setSorting] = React.useState([])
   const [openModal, setOpenModal] = React.useState(false)
+  const [modalRowId, setModalRowId] = React.useState(null)
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
@@ -281,15 +282,11 @@ export function DataTable({ data: initialData }) {
           <Button
             size="sm"
             variant="secondary"
-            onClick={() => setOpenModal(true)}
+            //onClick={() => setOpenModal(true)}
+            onClick={() => setModalRowId(row.original.id)}
           >
             <UserRoundPenIcon />
           </Button>
-          <HumanScoreModal
-            open={openModal}
-            onOpenChange={setOpenModal}
-            recordId={row.original.id}
-          />
         </div>
       ),
     },
@@ -331,7 +328,7 @@ export function DataTable({ data: initialData }) {
       })
     }
   }
-  console.log('REAL', data)
+  console.log('REAL', modalRowId)
   return (
     <Tabs
       defaultValue="outline"
@@ -508,6 +505,13 @@ export function DataTable({ data: initialData }) {
             </div>
           </div>
         </div>
+        <HumanScoreModal
+          open={!!modalRowId}
+          onOpenChange={(open) => {
+            if (!open) setModalRowId(null)
+          }}
+          recordId={modalRowId}
+        />
       </TabsContent>
       <TabsContent
         value="past-performance"

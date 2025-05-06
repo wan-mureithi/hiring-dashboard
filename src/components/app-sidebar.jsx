@@ -2,25 +2,14 @@
 
 import * as React from 'react'
 import {
-  ArrowUpCircleIcon,
-  CylinderIcon,
-  CameraIcon,
-  ClipboardListIcon,
-  DatabaseIcon,
-  FileCodeIcon,
-  FileIcon,
-  FileTextIcon,
   FolderIcon,
-  HelpCircleIcon,
   LayoutDashboardIcon,
   ListIcon,
-  SearchIcon,
   SettingsIcon,
   ShieldIcon,
   ChartColumnDecreasingIcon,
 } from 'lucide-react'
 
-import { NavDocuments } from '@/components/nav-documents'
 import { NavMain } from '@/components/nav-main'
 import { NavSecondary } from '@/components/nav-secondary'
 import { NavUser } from '@/components/nav-user'
@@ -54,7 +43,7 @@ const data = {
     },
     {
       title: 'Explore',
-      url: '/',
+      url: '/explore',
       icon: ChartColumnDecreasingIcon,
     },
     {
@@ -62,53 +51,10 @@ const data = {
       url: '/job',
       icon: ListIcon,
     },
-  ],
-  navClouds: [
     {
-      title: 'Capture',
-      icon: CameraIcon,
-      isActive: true,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#',
-        },
-        {
-          title: 'Archived',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Proposal',
-      icon: FileTextIcon,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#',
-        },
-        {
-          title: 'Archived',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Prompts',
-      icon: FileCodeIcon,
-      url: '#',
-      items: [
-        {
-          title: 'Active Proposals',
-          url: '#',
-        },
-        {
-          title: 'Archived',
-          url: '#',
-        },
-      ],
+      title: 'AI prompts',
+      url: '/prompts',
+      icon: ListIcon,
     },
   ],
   navSecondary: [

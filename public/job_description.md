@@ -5,7 +5,7 @@
 
 ---
 
-## 🏢 About Joopiter Co.
+## About Joopiter Co.
 
 Joopiter Co. is a dynamic, impact-driven fintech startup based in Nairobi, Kenya. We build data and AI-powered solutions that empower organizations and governments across Africa to make smarter, evidence-based decisions. Our mission is to drive social and financial inclusion through cutting-edge data science tools and human-centered design.
 
@@ -13,7 +13,7 @@ We collaborate with NGOs, financial institutions, and public sector agencies to 
 
 ---
 
-## 👩🏽‍💻 Who We’re Looking For
+## Who We’re Looking For
 
 We are seeking a **bright, curious, and motivated Technical Data Scientist** to join our growing team. This is an entry-level position ideal for someone with strong analytical instincts and a passion for solving problems using data.
 
@@ -21,7 +21,7 @@ You don’t need years of experience, but you should demonstrate initiative, cla
 
 ---
 
-## 🎯 Key Responsibilities
+## Key Responsibilities
 
 - Analyze, clean, and model structured and unstructured datasets from multiple sectors (e.g., finance, social impact, health).
 - Build scalable data pipelines and prototypes for client-facing solutions.
@@ -31,9 +31,9 @@ You don’t need years of experience, but you should demonstrate initiative, cla
 
 ---
 
-## ✅ Must-Have Qualifications
+## Must-Have Qualifications
 
-- Proficiency in **Python** (experience with libraries like `pandas`, `numpy`, `scikit-learn`)
+- Proficiency in **Python** (experience with libraries like pandas, numpy, scikit-learn)
 - Understanding of basic data analytics or machine learning concepts
 - Ability to communicate clearly and document your code
 - Portfolio of personal projects, schoolwork, or GitHub repos demonstrating applied skills
@@ -41,7 +41,7 @@ You don’t need years of experience, but you should demonstrate initiative, cla
 
 ---
 
-## 💡 Nice-to-Haves (Bonus)
+## Nice-to-Haves (Bonus)
 
 - Experience with **JavaScript** or frontend development (React, D3.js)
 - Exposure to **Generative AI** projects (LLMs, embeddings, chatbots)
@@ -50,7 +50,7 @@ You don’t need years of experience, but you should demonstrate initiative, cla
 
 ---
 
-## 🌍 Why Work With Us?
+## Why Work With Us?
 
 - Work with a mission-aligned team building tech that makes a difference
 - Learn fast and contribute to real products used by real users
@@ -72,7 +72,7 @@ This is a rolling application. We encourage early applications.
 
 ---
 
-## ✨ Final Note
+## Final Note
 
 We believe in **potential over polish**. If you’re excited about data, care about social impact, and are eager to grow your skills—we’d love to meet you.
 

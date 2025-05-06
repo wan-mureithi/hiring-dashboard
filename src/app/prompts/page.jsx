@@ -3,13 +3,12 @@ import React, { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 function JobPostingPage() {
-  const [jobDescription, setJobDescription] = useState('') // Store job description content
   const [isEditing, setIsEditing] = useState(false) // Toggle edit mode for prompt
   const [markdown, setMarkdown] = useState('')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/job_description.md')
+    fetch('/llm_prompt.md')
       .then((res) => res.text())
       .then((text) => {
         setMarkdown(text)
@@ -29,42 +28,22 @@ function JobPostingPage() {
     <div className="container p-4">
       {/* <h1 className="text-xl font-semibold mb-4">Job Details</h1> */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Job Description</h2>
+        <h2 className="text-lg font-semibold mb-2">AI prompt for scoring</h2>
         <ReactMarkdown>{markdown}</ReactMarkdown>
       </div>
 
-      {/* <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Prompt Criteria</h2>
-        {isEditing ? (
-          <textarea
-            className="w-full p-4 border rounded"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Edit the criteria prompt here..."
-          />
-        ) : (
-          <ReactMarkdown>{prompt}</ReactMarkdown>
-        )}
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          className="mt-2 text-blue-500"
-        >
-          {isEditing ? 'Cancel' : 'Edit'}
-        </button>
-      </div> */}
-
       <div className="flex justify-end gap-4">
-        <button
+        {/* <button
           onClick={handleCancel}
           className="bg-gray-500 text-white px-4 py-2 rounded"
         >
           Cancel
-        </button>
+        </button> */}
         <button
           onClick={handleSave}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          Save
+          Edit
         </button>
       </div>
     </div>
