@@ -77,6 +77,11 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip'
 
 export const schema = z.object({
   id: z.number(),
@@ -170,14 +175,16 @@ const columns = [
     accessorKey: 'cv_rating',
     header: 'CV Rating',
     cell: ({ row }) => (
-      <div className="relative group cursor-pointer w-fit">
-        <span>{row.original['CV rating'] || '--'}</span>
-        {row.original['AI reasoning'] && (
-          <div className="absolute z-20 hidden group-hover:block mt-1 w-[200px] p-2 rounded bg-muted text-sm text-muted-foreground shadow-md">
-            {row.original['AI reasoning']}
-          </div>
-        )}
-      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="cursor-pointer">
+            {row.original['CV rating'] || '--'}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-sm whitespace-pre-wrap">
+          {row.original['AI reasoning']}
+        </TooltipContent>
+      </Tooltip>
     ),
     enableSorting: true,
   },
@@ -196,7 +203,9 @@ const columns = [
           variant="secondary"
           onClick={() => {
             // Call FastAPI /score endpoint with row.original.id
-            fetch(`/api/score/${row.original.id}`, { method: 'POST' })
+            fetch(`http://127.0.0.1:8000/score/cv/${row.original.id}`, {
+              method: 'POST',
+            })
               .then(() => toast.success('Score requested!'))
               .catch(() => toast.error('Failed to trigger scoring'))
           }}
@@ -348,7 +357,7 @@ export function DataTable({ data: initialData }) {
         value="outline"
         className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
       >
-        <div className="overflow-hidden rounded-lg border">
+        <div className=" rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}

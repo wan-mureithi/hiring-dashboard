@@ -4,6 +4,7 @@ import './globals.css'
 import { SiteHeader } from '@/components/site-header'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import Providers from '@/components/providers'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,7 +33,7 @@ export default function RootLayout({ children }) {
             <AppSidebar variant="inset" />
             <SidebarInset>
               <SiteHeader />
-              {children}
+              <TooltipProvider>{children}</TooltipProvider>
             </SidebarInset>
           </SidebarProvider>
         </Providers>
